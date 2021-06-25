@@ -1,27 +1,55 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="static/css/style.css" >
-    <title>Авторизация</title>
-</head>
+<!--<!doctype html>-->
+<!--<html lang="ru">-->
+<!--<head>-->
+    <!--<meta charset="UTF-8">-->
+    <!--<meta name="viewport"-->
+          <!--content="width=device-width, user-scalable=no, initial-scale=1.0">-->
+    <!--<meta http-equiv="X-UA-Compatible" content="ie=edge">-->
+    <!--<link rel="stylesheet" href="static/css/style.css" >-->
+    <!--<title>{{title}}</title>-->
+<!--</head>-->
+<!--<body class="text-center" >-->
+    <!--<main class="form-signin">-->
+        <!--<form>-->
+            <!--<h1 class="h3 mb-3 fw-normal">Пожалуйста авторизуйтесь</h1>-->
+            <!--<div class="form-floating">-->
+                <!--<input  class="form-control" type="text" id="floatingInput" placeholder="Логин">-->
+            <!--</div>-->
+            <!--<div class="form-floating">-->
+                <!--<input  class="form-control" type="password"  id="floatingPassword" placeholder="Пароль">-->
+            <!--</div>-->
+            <!--<div class="checkbox mb-3">-->
+                <!--<label>-->
+                  <!--<input class="checkbox" type="checkbox" value="remember-me"> Запомнить меня-->
+                <!--</label>-->
+            <!--</div>-->
+        <!--</form>-->
+        <!--<form action="/personal_cabinet">-->
+            <!--<button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>-->
+        <!--</form>-->
+        <!--<form action="/registration">-->
+             <!--<button class="w-100 btn btn-lg btn-secondary" type="submit">Зарегистрироваться</button>-->
+        <!--</form>-->
+        <!--<p class="mt-5 mb-3 text-muted">&copy;2021</p>-->
+    <!--</main>-->
+
+<!--</body>-->
+<!--</html>-->
+
+{% extends  'base.html' %}
+{% block content%}
 <body class="text-center" >
     <main class="form-signin">
-        <form>
+        <form action="/index" method="post">
             <h1 class="h3 mb-3 fw-normal">Пожалуйста авторизуйтесь</h1>
             <div class="form-floating">
-                <input  class="form-control" type="text" id="floatingInput" placeholder="Логин">
+                <input  class="form-control" type="text" name="login" value='' placeholder="Логин">
             </div>
             <div class="form-floating">
-                <input  class="form-control" type="password"  id="floatingPassword" placeholder="Пароль">
+                <input  class="form-control" type="password" name="password" value="" placeholder="Пароль">
             </div>
             <div class="checkbox mb-3">
-                <label>
-                  <input class="checkbox" type="checkbox" value="remember-me"> Запомнить меня
-                </label>
+                <label><input class="checkbox" type="checkbox" value="remember-me"> Запомнить меня</label>
             </div>
         </form>
         <form action="/personal_cabinet">
@@ -34,4 +62,4 @@
     </main>
 
 </body>
-</html>
+{% endblock %}
