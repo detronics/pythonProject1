@@ -23,6 +23,9 @@
 
 {% extends  'base.html' %}
 {% block content%}
+{% for cat,msg in get_flashed_messages(True)%}
+<div class="{{cat}}" >{{msg}}</div>
+{% endfor %}
     <h1>Данные о пользователе</h1>
     <form action="/registration" method="post">
         <input class="form-control" type="text" name="name" placeholder="Имя" value="" required><br>

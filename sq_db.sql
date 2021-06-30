@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS data (
+id integer PRIMARY KEY AUTOINCREMENT,
+day text NOT NULL,
+value_oks text NOT NULL
+);
