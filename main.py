@@ -51,12 +51,21 @@ def index():
     return render_template('index.html', title='Авторизация')
 
 
-@app.route('/personal_cabinet/<username>')
+@app.route('/personal_cabinet/<username>', methods=['POST', 'GET'])
 def personal_cabinet(username):
     if 'userLogged' not in session or session['userLogged'] != username:
         abort(401)
     db = get_db()
     dbase = FDataBase(db)
+    if request.method == 'POST':
+        if len(request.form['sat_value']) == 2 and str(request.form['sat_value']).isnumeric():
+            res = dbase.addValue(sat_value=request.form['sat_value'])
+            if not res :
+                flash('error', category='bad')
+            else:
+                flash('alright', category='good')
+        else:
+            flash('errorr', category='bad')
     return render_template('personal_cabinet.html', title='Личный кабинет', username=username, values = dbase.getValues())
 
 

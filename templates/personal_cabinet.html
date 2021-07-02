@@ -2,15 +2,27 @@
 {% block content%}
 <body >
     <h1>Личный кабинет пользователя: {{username}}</h1><br>
-
-    <table border="1">
+    <table border="1" cellpadding="1" cellspacing="1">
         <caption>История показаний</caption>
         <tr>
             <th>#</th>
             <th>Дата</th>
             <th> Значение сатурации</th>
         </tr>
-
-    </table>
+        {% for data in values%}
+        <tr>
+            <td>{{data.id-1}}</td>
+            <td>{{data.day}}</td>
+            <td>{{data.value_oks}}</td>
+        </tr>
+        {% endfor%}
+    </table><br>
+    {% for cat,msg in get_flashed_messages(True)%}
+    <div class="{{cat}}" >{{msg}}</div>
+    {% endfor %}
+    <form action="/personal_cabinet/{{username}}" method="post">
+        <input type="text" name="sat_value" placeholder="Значение сатурации" value="" required ><br>
+        <button>Отправить показания</button>
+    </form>
 </body>
 {% endblock %}
