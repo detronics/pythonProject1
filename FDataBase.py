@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import date
+from UserLogin import UserLogin
 
 
 class FDataBase:
@@ -20,10 +21,12 @@ class FDataBase:
     def addValue(self, sat_value):
         try:
             data = date.today()
-            self.__cur.execute('INSERT INTO data VALUES(NULL, ?, ?)', (data, sat_value))
+            user_id = UserLogin.get_id()
+            print(user_id)
+            self.__cur.execute('INSERT INTO data VALUES(NULL, ?, ?, ?)', (user_id, data, sat_value))
             self.__db.commit()
         except sqlite3.Error as e:
-            print('add error ' + str(e))
+            print('addvalue error ' + str(e))
             return False
         return True
 
@@ -51,17 +54,18 @@ class FDataBase:
                 return False
             return res
         except sqlite3.Error as e:
-            print('add error ' + str(e))
+            print('add error get user' + str(e))
             return False
 
     def getUserbyLogin(self, login):
         try:
-            self.__cur.execute(f'SELECT * FROM users WHERE login = {login} LIMIT 1')
+            self.__cur.execute(f'SELECT * FROM users WHERE login = "{login}" LIMIT 1')
             res = self.__cur.fetchone()
+            print(res)
             if not res:
                 print('user is not found')
                 return False
             return res
         except sqlite3.Error as e:
-            print('add error ' + str(e))
+            print('add error getUserbyLogin ' + str(e))
             return False

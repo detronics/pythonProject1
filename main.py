@@ -17,7 +17,7 @@ login_manager = LoginManager(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    print('load user ')
+    print('load user  ', user_id)
     return UserLogin().fromDB(user_id, dbase)
 
 
@@ -57,18 +57,15 @@ def close_db(error):
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
-        user = dbase.getgetUserbyLogin(request.form['login'])
-        if user and check_password_hash(user['psw'], request.form['psw']):
+        user = dbase.getUserbyLogin(request.form['login'])
+        if user and check_password_hash(user['psw_hash'], request.form['password']):
             userlogin = UserLogin().create(user)
-            login_user(UserLogin)
-            redirect(url_for('registration'))
+            login_user(userlogin)
+            session['userLogged'] = request.form['login']
+            return redirect(url_for('personal_cabinet', username=session['userLogged']))
         flash('error login or password', category='bad')
-    # if 'userLogged' in session:
-    #     return redirect(url_for('personal_cabinet', username=session['userLogged']))
-    # elif request.method == "POST" and request.form['username'] == 'kip' and request.form['password'] == '123':
-    #     session['userLogged'] = request.form['username']
-    #     return redirect(url_for('personal_cabinet', username=session['userLogged']))
     return render_template('index.html', title='Авторизация')
+
 
 
 @app.route('/personal_cabinet/<username>', methods=['POST', 'GET'])
