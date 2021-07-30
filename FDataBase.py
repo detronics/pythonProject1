@@ -8,21 +8,18 @@ class FDataBase:
         self.__db = db
         self.__cur = db.cursor()
 
-    def getValues(self):
-        sql = '''SELECT * FROM data'''
+    def getValues(self, user_id):
         try:
-            self.__cur.execute(sql)
+            self.__cur.execute( f'SELECT * FROM data WHERE user_id = {user_id}')
             res = self.__cur.fetchall()
             if res: return res
         except:
             print('error read database')
         return []
 
-    def addValue(self, sat_value):
+    def addValue(self, sat_value, user_id):
         try:
             data = date.today()
-            user_id = UserLogin.get_id()
-            print(user_id)
             self.__cur.execute('INSERT INTO data VALUES(NULL, ?, ?, ?)', (user_id, data, sat_value))
             self.__db.commit()
         except sqlite3.Error as e:
@@ -61,7 +58,6 @@ class FDataBase:
         try:
             self.__cur.execute(f'SELECT * FROM users WHERE login = "{login}" LIMIT 1')
             res = self.__cur.fetchone()
-            print(res)
             if not res:
                 print('user is not found')
                 return False
