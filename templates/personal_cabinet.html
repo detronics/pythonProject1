@@ -1,7 +1,7 @@
 {% extends  'base.html' %}
 {% block content%}
 <body >
-    <h1>Личный кабинет пользователя: {{username}}</h1><br>
+    <h1>Личный кабинет пользователя</h1><br>
     <table border="1" cellpadding="1" cellspacing="1">
         <caption>История показаний</caption>
         <tr>
@@ -20,11 +20,11 @@
     {% for cat,msg in get_flashed_messages(True)%}
     <div class="{{cat}}" >{{msg}}</div>
     {% endfor %}
-    <form action="/personal_cabinet/{{username}}" method="post">
+    <form action="/personal_cabinet/" method="post">
         <input type="text" name="sat_value" placeholder="Значение сатурации" value="" required ><br>
         <button>Отправить показания</button>
     </form>
-        <form action="/personal_cabinet/{{username}}">
+        <form action="/personal_cabinet/">
             <a href="/logout">logout</a>
     </form>
 </body>

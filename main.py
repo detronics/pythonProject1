@@ -60,6 +60,8 @@ def close_db(error):
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('personal_cabinet', ))
     if request.method == 'POST':
         user = dbase.getUserbyLogin(request.form['login'])
         if user and check_password_hash(user['psw_hash'], request.form['password']):
@@ -67,25 +69,25 @@ def index():
             rm = True if request.form.get('remember_me') else False
             print('rm= ', rm)
             login_user(userlogin, remember=rm)
-            # session['userLogged'] = request.form['login']
-            return redirect(url_for('personal_cabinet', username=request.form['login']))
+            return redirect(url_for('personal_cabinet', ))
         flash('error login or password', category='bad')
     return render_template('index.html', title='Авторизация')
 
 
-@app.route('/personal_cabinet/<username>', methods=['POST', 'GET'])
+@app.route('/personal_cabinet/', methods=['POST', 'GET'])
 @login_required
-def personal_cabinet(username):
+def personal_cabinet():
     if request.method == 'POST':
         if len(request.form['sat_value']) == 2 and str(request.form['sat_value']).isnumeric():
             res = dbase.addValue(sat_value=request.form['sat_value'], user_id=current_user.get_id())
+            user_log = current_user.get_login()
             if not res:
                 flash('error', category='bad')
             else:
                 flash('alright', category='good')
         else:
             flash('error', category='bad')
-    return render_template('personal_cabinet.html', title='Личный кабинет', username=username, values=dbase.getValues(user_id=current_user.get_id()))
+    return render_template('personal_cabinet.html', title='Личный кабинет',  values=dbase.getValues(user_id=current_user.get_id()))
 
 
 @app.route('/registration', methods=['POST', 'GET'])
@@ -102,8 +104,8 @@ def registration():
                 user = dbase.getUserbyLogin(request.form['login'])
                 userlogin = UserLogin().create(user)
                 login_user(userlogin)
-                session['userLogged'] = request.form['login']
-                return redirect(url_for('personal_cabinet', username=session['userLogged']))
+                # session['userLogged'] = request.form['login']
+                return redirect(url_for('personal_cabinet',))
             else:
                 flash('DB error', category='bad')
         else:
