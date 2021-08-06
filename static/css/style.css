@@ -4,4 +4,16 @@
 
 .bad{
     background-color: red;
+}
+.center{
+    align: center;
+}
 
+.form-singin{
+    width: 200px;
+    height: 80px;
+}
+
+.h{ background-color: red;
+
+}
