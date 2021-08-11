@@ -94,6 +94,9 @@
     <main class="form-signin">
             <form action="/" method="post">
                 <h1 style="text-align: center">Пожалуйста авторизуйтесь</h1>
+                {% for cat,msg in get_flashed_messages(True)%}
+                <div class="{{cat}}" >{{msg}}</div>
+                {% endfor %}
                 <div class="form-floating">
                     <input  class="form-control" type="text" name="login" value='' placeholder="Логин">
                 </div>

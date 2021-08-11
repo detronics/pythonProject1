@@ -4,6 +4,7 @@ from FDataBase import FDataBase
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from UserLogin import UserLogin
+from  oksy import Recognizer
 
 # config
 DATABASE = '/tmp/main.db'
@@ -15,6 +16,8 @@ app.config.from_object(__name__)
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'main.db')))
 login_manager = LoginManager(app)
+login_manager.login_view = 'index'
+login_manager.loogin_message = ' you need to authorize'
 
 
 @login_manager.user_loader
@@ -67,10 +70,9 @@ def index():
         if user and check_password_hash(user['psw_hash'], request.form['password']):
             userlogin = UserLogin().create(user)
             rm = True if request.form.get('remember_me') else False
-            print('rm= ', rm)
-            login_user(userlogin, remember=rm)
+            login_user(userlogin, remember=True)
             return redirect(url_for('personal_cabinet', ))
-        flash('error login or password', category='bad')
+        flash('Неверные логин или пароль', category='bad')
     return render_template('index.html', title='Авторизация')
 
 
@@ -80,13 +82,13 @@ def personal_cabinet():
     if request.method == 'POST':
         if len(request.form['sat_value']) == 2 and str(request.form['sat_value']).isnumeric():
             res = dbase.addValue(sat_value=request.form['sat_value'], user_id=current_user.get_id())
-            user_log = current_user.get_login()
+            # user_log = current_user.get_login()
             if not res:
-                flash('error', category='bad')
+                flash('Ошибка записи данных', category='bad')
             else:
-                flash('alright', category='good')
+                flash('Данные успешно добавлены', category='good')
         else:
-            flash('error', category='bad')
+            flash('Неверный формат данных', category='bad')
     return render_template('personal_cabinet.html', title='Личный кабинет',  values=dbase.getValues(user_id=current_user.get_id()))
 
 
@@ -100,16 +102,16 @@ def registration():
                                 request.form['cognomen'], request.form['age'], request.form['weight'],
                                 request.form['height'])
             if res:
-                flash('Success registration', category='good')
+                flash('Вы успешно зарегистрированы', category='good')
                 user = dbase.getUserbyLogin(request.form['login'])
                 userlogin = UserLogin().create(user)
                 login_user(userlogin)
                 # session['userLogged'] = request.form['login']
                 return redirect(url_for('personal_cabinet',))
             else:
-                flash('DB error', category='bad')
+                flash('Ошибка записи в базу данных', category='bad')
         else:
-            flash('Error field', category='bad')
+            flash('Неверно заполнены поля', category='bad')
     return render_template('registration.html', title='Регистрация')
 
 @app.route('/logout')
@@ -120,6 +122,17 @@ def logout():
     # flash('You logout succssesfully', category='good')
     return redirect(url_for('index'))
 
+@app.route('/upload', methods=['POST', 'GET'])
+@login_required
+def upload():
+    if request.method == "POST":
+        file = request.files['file']
+        if file and current_user.verifyExt(file.filename):
+            try:
+                foto = Recognizer(file=file)
+                value = foto.recognize()
+            except FileNotFoundError as e:
+                flash(message='Ошибка чтения файла', category='bad')
 @app.errorhandler(404)
 def PageNotFound(error):
     return render_template('page404.html', title='Страница не найдена')
