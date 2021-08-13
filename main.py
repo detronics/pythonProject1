@@ -89,7 +89,7 @@ def personal_cabinet():
                 flash('Данные успешно добавлены', category='good')
         else:
             flash('Неверный формат данных', category='bad')
-    return render_template('personal_cabinet.html', title='Личный кабинет',  values=dbase.getValues(user_id=current_user.get_id()))
+    return render_template('personal_cabinet.html', title='Личный кабинет',  values=dbase.getValues(user_id=current_user.get_id()), sat_value='')
 
 
 @app.route('/registration', methods=['POST', 'GET'])
@@ -118,8 +118,7 @@ def registration():
 @login_required
 def logout():
     logout_user()
-    print('alright')
-    # flash('You logout succssesfully', category='good')
+    flash('Вы вышли из аккаунта', category='good')
     return redirect(url_for('index'))
 
 @app.route('/upload', methods=['POST', 'GET'])
@@ -127,12 +126,18 @@ def logout():
 def upload():
     if request.method == "POST":
         file = request.files['file']
+        print(file)
         if file and current_user.verifyExt(file.filename):
             try:
                 foto = Recognizer(file=file)
-                value = foto.recognize()
+                # value = foto.recognize()
+                # print(value)
             except FileNotFoundError as e:
                 flash(message='Ошибка чтения файла', category='bad')
+    else:
+        flash(message='Ошибка добавления данных', category='bad')
+    return render_template('personal_cabinet.html', title='Личный кабинет',  values=dbase.getValues(user_id=current_user.get_id()), sat_value='99')
+
 @app.errorhandler(404)
 def PageNotFound(error):
     return render_template('page404.html', title='Страница не найдена')
