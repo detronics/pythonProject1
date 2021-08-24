@@ -10,9 +10,19 @@ class FDataBase:
 
     def getValues(self, user_id):
         try:
-            self.__cur.execute( f'SELECT * FROM data WHERE user_id = {user_id}')
+            self.__cur.execute(f'SELECT * FROM data WHERE user_id = {user_id}')
             res = self.__cur.fetchall()
             if res: return res
+        except:
+            print('error read database')
+        return []
+
+    def getUserData(self, user_id):
+        try:
+            self.__cur.execute(f'SELECT * FROM users WHERE id = {user_id}')
+            res = self.__cur.fetchall()
+            if res: return res
+            print('that all', res)
         except:
             print('error read database')
         return []

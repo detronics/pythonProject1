@@ -4,7 +4,7 @@ from FDataBase import FDataBase
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from UserLogin import UserLogin
-from  oksy import Recognizer
+from oksy import Recognizer
 
 # config
 DATABASE = '/tmp/main.db'
@@ -89,7 +89,9 @@ def personal_cabinet():
                 flash('Данные успешно добавлены', category='good')
         else:
             flash('Неверный формат данных', category='bad')
-    return render_template('personal_cabinet.html', title='Личный кабинет',  values=dbase.getValues(user_id=current_user.get_id()), sat_value='')
+    return render_template('personal_cabinet.html', title='Личный кабинет',
+                           values=dbase.getValues(user_id=current_user.get_id()),
+                           user_data=dbase.getUserData(user_id=current_user.get_id()), sat_value='')
 
 
 @app.route('/registration', methods=['POST', 'GET'])
@@ -106,13 +108,13 @@ def registration():
                 user = dbase.getUserbyLogin(request.form['login'])
                 userlogin = UserLogin().create(user)
                 login_user(userlogin)
-                # session['userLogged'] = request.form['login']
-                return redirect(url_for('personal_cabinet',))
+                return redirect(url_for('personal_cabinet', ))
             else:
                 flash('Ошибка записи в базу данных', category='bad')
         else:
             flash('Неверно заполнены поля', category='bad')
     return render_template('registration.html', title='Регистрация')
+
 
 @app.route('/logout')
 @login_required
@@ -121,12 +123,12 @@ def logout():
     flash('Вы вышли из аккаунта', category='good')
     return redirect(url_for('index'))
 
+
 @app.route('/upload', methods=['POST', 'GET'])
 @login_required
 def upload():
     if request.method == "POST":
         file = request.files['file']
-        print(file)
         if file and current_user.verifyExt(file.filename):
             try:
                 foto = Recognizer(file=file)
@@ -136,7 +138,10 @@ def upload():
                 flash(message='Ошибка чтения файла', category='bad')
     else:
         flash(message='Ошибка добавления данных', category='bad')
-    return render_template('personal_cabinet.html', title='Личный кабинет',  values=dbase.getValues(user_id=current_user.get_id()), sat_value='99')
+    return render_template('personal_cabinet.html', title='Личный кабинет',
+                           values=dbase.getValues(user_id=current_user.get_id()),
+                           user_data=dbase.getUserData(user_id=current_user.get_id()), sat_value='99')
+
 
 @app.errorhandler(404)
 def PageNotFound(error):
