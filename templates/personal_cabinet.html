@@ -2,23 +2,27 @@
 {% block content%}
 <body>
     <nav class="nav-pc">
-        <h1 class="h1-pc">Личный кабинет пользователя</h1>
+        {% for data in user_data%}
+        <h1 class="h1-pc">Личный кабинет пользователя: {{data.login}}</h1>
+        {% endfor%}
             <form action="/logout">
                 <button type="submit" class="b-log">Выйти</button>
             </form>
     </nav>
     <main class="m">
         <div class="d-ava">
-                <h2>Данные пользователя</h2>
+                <h2 style="align-self:center;">Данные пользователя</h2>
                 {% for data in user_data%}
-                <img src="static/images/avatar.jpg" alt="avatar" width="150px" height="150px">
-                <label>Имя: {{user_data.name}} </label>
-                <label>Фамилия: </label>
-                <label>Отчество: </label>
-                <label>Рост: </label>
-                <label>Вес: </label>
+                <img src="\static\images\avatar.jpg" alt="avatar" width="150px" height="150px">
+                <label>Имя: {{data.name}} </label>
+                <label>Фамилия: {{data.subname}} </label>
+                <label>Отчество: {{data.cognomen}}</label>
+                <label>Рост: {{data.height}} </label>
+                <label>Вес: {{data.weight}} </label>
+                <label>Возраст: {{data.age}} </label>
                 {% endfor%}
-                <button type="submit">Редактировать данные</button>
+                <button style="    align-self: flex-end;
+    margin-right: 5px;" type="submit">Редактировать данные</button>
         </div>
 
         <div class="d-tab">
@@ -38,17 +42,19 @@
                 {% endfor%}
             </table>
         </div>
-            {% for cat,msg in get_flashed_messages(True)%}
-        <div class="{{cat}}" >{{msg}}</div>
-            {% endfor %}
-        <form action="/personal_cabinet/" method="post">
-            <input type="text" name="sat_value" placeholder="Значение сатурации" value="{{sat_value}}" required ><br>
-            <button>Отправить показания</button>
-        </form>
-        <form action="{{url_for('upload')}}" method="post" enctype="multipart/form-data">
-            <p><input type="file" name="file"></p>
-            <input type="submit" name="file" value="Считать показания">
-        </form>
+        <div class="d-tab">
+                {% for cat,msg in get_flashed_messages(True)%}
+            <div class="{{cat}}" >{{msg}}</div>
+                {% endfor %}
+            <form action="/personal_cabinet/" method="post">
+                <input type="text" name="sat_value" placeholder="Значение сатурации" value="{{sat_value}}" required ><br>
+                <button>Отправить показания</button>
+            </form>
+            <form action="{{url_for('upload')}}" method="post" enctype="multipart/form-data">
+                <p><input type="file" name="file"></p>
+                <input type="submit" name="file" value="Считать показания">
+            </form>
+        </div>
     </main>
 </body>
 {% endblock %}
