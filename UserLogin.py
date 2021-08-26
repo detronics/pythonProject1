@@ -19,6 +19,10 @@ class UserLogin():
     def get_id(self):
         return str(self.__user['id'])
 
+    def get_name(self):
+        return str(self.__user['name'])
+
+
     def verifyExt(self, filename):
         ext = filename.split('.',1)[1]
         if ext == "JPG" or ext == 'jpg':
