@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, flash, session, redirect, abort, g
+from flask import Flask, render_template, url_for, request, flash, session, redirect, abort, g, make_response
 import os, sqlite3
 from FDataBase import FDataBase
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -132,15 +132,26 @@ def upload():
         if file and current_user.verifyExt(file.filename):
             try:
                 foto = Recognizer(file=file)
-                # value = foto.recognize()
-                # print(value)
+                value = foto.recognize()
             except FileNotFoundError as e:
                 flash(message='Ошибка чтения файла', category='bad')
     else:
         flash(message='Ошибка добавления данных', category='bad')
     return render_template('personal_cabinet.html', title='Личный кабинет',
                            values=dbase.getValues(user_id=current_user.get_id()),
-                           user_data=dbase.getUserData(user_id=current_user.get_id()), sat_value='99')
+                           user_data=dbase.getUserData(user_id=current_user.get_id()), sat_value=value)
+
+
+@app.route('/userava', methods=['POST', 'GET'])
+@login_required
+def userava():
+    img = current_user.getAvatar(app)
+    if not img:
+        return ''
+    h = make_response(img)
+    h.headers["Content-type"] = 'image/jpeg'
+    return h
+
 
 
 @app.errorhandler(404)

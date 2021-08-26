@@ -44,7 +44,7 @@ class FDataBase:
             if res['count'] > 0:
                 print('login is busy')
                 return False
-            self.__cur.execute('INSERT INTO users VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?)',
+            self.__cur.execute('INSERT INTO users VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, NULL)',
                                (login, psw_hash, name, subname, cognomen, age, weight, height))
             self.__db.commit()
         except sqlite3.Error as e:

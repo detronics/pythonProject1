@@ -14,7 +14,7 @@
                 <h2 style="align-self:center;">Данные пользователя</h2>
                 {% for data in user_data%}
                 <img src="\static\images\avatar.jpg" alt="avatar" width="150px" height="150px">
-                <label>Имя: {{data.name}} </label>
+                <label>Имя: {{current_user.getname()}} </label>
                 <label>Фамилия: {{data.subname}} </label>
                 <label>Отчество: {{data.cognomen}}</label>
                 <label>Рост: {{data.height}} </label>
@@ -46,17 +46,19 @@
                 {% for cat,msg in get_flashed_messages(True)%}
             <div class="{{cat}}" >{{msg}}</div>
                 {% endfor %}
-            <form action="/personal_cabinet/" method="post">
-                <input type="text" name="sat_value" placeholder="Значение сатурации" value="{{sat_value}}" required ><br>
-                <button>Отправить показания</button>
-            </form>
             <form action="{{url_for('upload')}}" method="post" enctype="multipart/form-data">
                 <p><input type="file" name="file"></p>
                 <input type="submit" name="file" value="Считать показания">
             </form>
+            <form action="/personal_cabinet/" method="post">
+                <input type="text" name="sat_value" placeholder="Значение сатурации" value="{{sat_value}}" required ><br>
+                <button>Отправить показания</button>
+            </form>
+
         </div>
     </main>
 </body>
 {% endblock %}
+
 
 
