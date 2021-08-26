@@ -91,7 +91,7 @@ def personal_cabinet():
             flash('Неверный формат данных', category='bad')
     return render_template('personal_cabinet.html', title='Личный кабинет',
                            values=dbase.getValues(user_id=current_user.get_id()),
-                           user_data=dbase.getUserData(user_id=current_user.get_id()), sat_value='')
+                            sat_value='')
 
 
 @app.route('/registration', methods=['POST', 'GET'])
@@ -135,11 +135,10 @@ def upload():
                 value = foto.recognize()
             except FileNotFoundError as e:
                 flash(message='Ошибка чтения файла', category='bad')
-    else:
-        flash(message='Ошибка добавления данных', category='bad')
+        else:
+            flash(message='Ошибка добавления данных', category='bad')
     return render_template('personal_cabinet.html', title='Личный кабинет',
-                           values=dbase.getValues(user_id=current_user.get_id()),
-                           user_data=dbase.getUserData(user_id=current_user.get_id()), sat_value=value)
+                           values=dbase.getValues(user_id=current_user.get_id()), sat_value=value)
 
 
 @app.route('/userava', methods=['POST', 'GET'])
@@ -149,10 +148,28 @@ def userava():
     if not img:
         return ''
     h = make_response(img)
-    h.headers["Content-type"] = 'image/jpeg'
+    h.headers["Content-type"] = 'image/jpg'
     return h
 
 
+@app.route('/updateava', methods=['POST', 'GET'])
+@login_required
+def updateava():
+    if request.method == "POST":
+        file = request.files['file']
+        if file and current_user.verifyExt(file.filename):
+            try:
+                img = file.read()
+                res = dbase.updateUserAva(img, current_user.get_id())
+                if not res:
+                    flash(message='Ошибка обновления аватара', category='bad')
+                    return redirect(url_for('personal_cabinet'))
+                flash(message='Аватар обновлен', category='good')
+            except FileNotFoundError as e:
+                flash(message='Ошибка чтения файла', category='bad')
+        else:
+            flash(message='Ошибка обновления аватара', category='bad')
+    return redirect(url_for('personal_cabinet'))
 
 @app.errorhandler(404)
 def PageNotFound(error):

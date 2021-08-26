@@ -17,16 +17,6 @@ class FDataBase:
             print('error read database')
         return []
 
-    def getUserData(self, user_id):
-        try:
-            self.__cur.execute(f'SELECT * FROM users WHERE id = {user_id}')
-            res = self.__cur.fetchall()
-            if res: return res
-            print('that all', res)
-        except:
-            print('error read database')
-        return []
-
     def addValue(self, sat_value, user_id):
         try:
             data = date.today()
@@ -75,3 +65,16 @@ class FDataBase:
         except sqlite3.Error as e:
             print('add error getUserbyLogin ' + str(e))
             return False
+
+    def updateUserAvatar(self,avatar, user_id):
+        if not avatar:
+            return False
+
+        try:
+            binary = sqlite3.Binary(avatar)
+            self.__cur.execute(f'UPDATE users SET avatar = ? WHERE id = ?', binary, user_id)
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print('update avatar error' + str(e))
+            return False
+        return True

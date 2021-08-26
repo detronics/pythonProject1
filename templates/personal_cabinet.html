@@ -12,17 +12,19 @@
     <main class="m">
         <div class="d-ava">
                 <h2 style="align-self:center;">Данные пользователя</h2>
-                {% for data in user_data%}
-                <img src="\static\images\avatar.jpg" alt="avatar" width="150px" height="150px">
-                <label>Имя: {{current_user.getname()}} </label>
-                <label>Фамилия: {{data.subname}} </label>
-                <label>Отчество: {{data.cognomen}}</label>
-                <label>Рост: {{data.height}} </label>
-                <label>Вес: {{data.weight}} </label>
-                <label>Возраст: {{data.age}} </label>
-                {% endfor%}
+                <img src="{{url_for('userava')}}" alt="avatar" width="150px" height="150px">
+                <label>Имя: {{current_user.get_name()}} </label>
+                <label>Фамилия: {{current_user.get_subname()}} </label>
+                <label>Отчество: {{current_user.get_cognomen()}}</label>
+                <label>Рост: {{current_user.get_height()}} </label>
+                <label>Вес: {{current_user.get_weight()}} </label>
+                <label>Возраст: {{current_user.get_age()}}</label>
                 <button style="    align-self: flex-end;
     margin-right: 5px;" type="submit">Редактировать данные</button>
+                <form action="{{url_for('userava')}}" method="post" enctype="multipart/form-data">
+                    <p><input type="file" name="file"></p>
+                    <p><input type="submit" value="Загрузить"></p>
+                </form>
         </div>
 
         <div class="d-tab">
