@@ -135,12 +135,13 @@ label{
 
 .d-tab{
     height:500px;
-    width:250px;
+    width:275px;
     margin-right:15px;
 }
 
 img{
     align-self:center;
+    margin-bottom: 25px;
 }
 
 .d-ava{

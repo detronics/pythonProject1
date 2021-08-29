@@ -90,8 +90,7 @@ def personal_cabinet():
         else:
             flash('Неверный формат данных', category='bad')
     return render_template('personal_cabinet.html', title='Личный кабинет',
-                           values=dbase.getValues(user_id=current_user.get_id()),
-                            sat_value='')
+                           values=dbase.getValues(user_id=current_user.get_id()), sat_value='')
 
 
 @app.route('/registration', methods=['POST', 'GET'])
@@ -131,7 +130,7 @@ def upload():
         file = request.files['file']
         if file and current_user.verifyExt(file.filename):
             try:
-                foto = Recognizer(file=file)
+                foto = Recognizer(file=file.filename)
                 value = foto.recognize()
             except FileNotFoundError as e:
                 flash(message='Ошибка чтения файла', category='bad')
@@ -160,10 +159,9 @@ def updateava():
         if file and current_user.verifyExt(file.filename):
             try:
                 img = file.read()
-                res = dbase.updateUserAva(img, current_user.get_id())
+                res = dbase.updateUserAvatar(img, current_user.get_id())
                 if not res:
                     flash(message='Ошибка обновления аватара', category='bad')
-                    return redirect(url_for('personal_cabinet'))
                 flash(message='Аватар обновлен', category='good')
             except FileNotFoundError as e:
                 flash(message='Ошибка чтения файла', category='bad')

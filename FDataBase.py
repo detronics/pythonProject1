@@ -66,13 +66,12 @@ class FDataBase:
             print('add error getUserbyLogin ' + str(e))
             return False
 
-    def updateUserAvatar(self,avatar, user_id):
+    def updateUserAvatar(self, avatar, user_id):
         if not avatar:
             return False
-
         try:
             binary = sqlite3.Binary(avatar)
-            self.__cur.execute(f'UPDATE users SET avatar = ? WHERE id = ?', binary, user_id)
+            self.__cur.execute(f'UPDATE users SET avatar = ? WHERE id = ?', (binary, user_id))
             self.__db.commit()
         except sqlite3.Error as e:
             print('update avatar error' + str(e))
