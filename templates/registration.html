@@ -4,116 +4,66 @@
     <h1 class="h1">Регистрация</h1>
     <h2 class="r">Заполните поля представленные ниже:</h2>
     <form action="/registration" method="post">
-        <table>
-            <tr>
-                <td> <label class="lab-reg">Логин</label></td>
-                <td><input class="form-registr" type="text" name="login" placeholder="" value="" required></td>
-            </tr>
-            <tr>
-                <td><label  class="lab-reg">Пароль</label></td>
-                <td><input class="form-registr" type="password" name="psw1" placeholder="" value="" required></td>
-            </tr>
-            <tr>
-                <td><label  class="lab-reg">Повторите пароль</label></td>
-                <td><input class="form-registr" type="password" name="psw2" placeholder="" value="" required></td>
-            </tr>
-            <tr>
-                <td><label  class="lab-reg">Имя</label></td>
-                <td><input class="form-registr" type="text" name="name" placeholder="" value="" required></td>
-            </tr>
-            <tr>
-                <td><label  class="lab-reg">Фамилия</label></td>
-                <td><input class="form-registr" type="text" name="subname" placeholder="" value="" required></td>
-            </tr>
-            <tr>
-                <td><label  class="lab-reg">Отчество</label></td>
-                <td><input class="form-registr" type="text" name="cognomen" placeholder="" value="" required></td>
-            </tr>
-            <tr>
-                <td><label style="">Возраст</label></td>
-                <td><input class="form-registr" type="text" name="age" placeholder="" value="" required></td>
-            </tr>
-            <tr>
-                <td><label  class="lab-reg">Вес</label></td>
-                <td><input class="form-registr" type="text" name="weight" placeholder="" value="" required></td>
-            </tr>
-            <tr>
-                <td><label  class="lab-reg">Рост</label></td>
-                <td><input class="form-registr" type="text" name="height" placeholder="" value="" required></td>
-            </tr>
-        </table><br>
+        {{form.hidden_tag()}}
+        {% for field in form if field.name not in ['csrf_token', 'submit']-%}
+                     <p class="form-control"> {{field.label()}}
+                    {% if field.errors%}
+                        {{field (class='bad')}}
+                    <span class="bad">
+                        {% for e in field.errors%}
+                        {{ e }}
+                        {% endfor %}
+                    </span>
+                    {% else %}
+                        {{field()}}
+                    {% endif%}
+                {% endfor%}
+                <p> {{form.submit ()}}
+<!--        <table>-->
+<!--            <tr>-->
+<!--                <td> <label class="lab-reg">Логин</label></td>-->
+<!--                <td><input class="form-registr" type="text" name="login" placeholder="" value="" required></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td><label  class="lab-reg">Пароль</label></td>-->
+<!--                <td><input class="form-registr" type="password" name="psw1" placeholder="" value="" required></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td><label  class="lab-reg">Повторите пароль</label></td>-->
+<!--                <td><input class="form-registr" type="password" name="psw2" placeholder="" value="" required></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td><label  class="lab-reg">Имя</label></td>-->
+<!--                <td><input class="form-registr" type="text" name="name" placeholder="" value="" required></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td><label  class="lab-reg">Фамилия</label></td>-->
+<!--                <td><input class="form-registr" type="text" name="subname" placeholder="" value="" required></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td><label  class="lab-reg">Отчество</label></td>-->
+<!--                <td><input class="form-registr" type="text" name="cognomen" placeholder="" value="" required></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td><label style="">Возраст</label></td>-->
+<!--                <td><input class="form-registr" type="text" name="age" placeholder="" value="" required></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td><label  class="lab-reg">Вес</label></td>-->
+<!--                <td><input class="form-registr" type="text" name="weight" placeholder="" value="" required></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td><label  class="lab-reg">Рост</label></td>-->
+<!--                <td><input class="form-registr" type="text" name="height" placeholder="" value="" required></td>-->
+<!--            </tr>-->
+<!--        </table><br>-->
         {% for cat,msg in get_flashed_messages(True)%}
             <div class="{{cat}}" >{{msg}}</div>
         {% endfor %}
-         <input  class="singin"  type="submit" value="OK">
+        <p class="singin">{{form.submit()}}</p>
+<!--         <input  class="singin"  type="submit" value="OK">-->
     </form>
 
 </body>
 {% endblock %}
 
-<!--<!doctype html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-    <!--<meta charset="UTF-8">-->
-    <!--<meta name="viewport"-->
-          <!--content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">-->
-    <!--<meta http-equiv="X-UA-Compatible" content="ie=edge">-->
-    <!--<title>Document</title>-->
-<!--&lt;!&ndash;</head>&ndash;&gt;-->
-<!--<body style="    height: 100%;-->
-    <!--display: flex;-->
-    <!--padding-top: 40px;-->
-    <!--padding-bottom: 40px;-->
-    <!--margin: 0;-->
-    <!--box-sizing: border-box;-->
-    <!--align-content: center;-->
-    <!--justify-content: center;-->
-    <!--align-items: center;-->
-    <!--flex-direction: column;">-->
-    <!--<h1 style=" text-align: center;-->
-                <!--padding-bottom:1px;-->
-                <!--margin-bottom:2px;">Регистрация</h1>-->
-    <!--<h2 style=" font-size: 20px;">Заполните поля представленные ниже:</h2>-->
-    <!--<form action="/registration" method="post">-->
-        <!--<table>-->
-            <!--<tr>-->
-                <!--<td style="text-align:right;"> <label style="">Логин</label></td>-->
-                <!--<td><input class="form-control" type="text" name="login" placeholder="" value="" required></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td style="text-align:right;"><label style="">Пароль</label></td>-->
-                <!--<td><input class="form-control" type="password" name="psw1" placeholder="" value="" required></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td style="text-align:right;"><label style="">Повторите пароль</label></td>-->
-                <!--<td><input class="form-control" type="password" name="psw2" placeholder="" value="" required></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td style="text-align:right;"><label style="">Имя</label></td>-->
-                <!--<td><input class="form-control" type="text" name="name" placeholder="" value="" required></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td style="text-align:right;"><label style="">Фамилия</label></td>-->
-                <!--<td><input class="form-control" type="text" name="subname" placeholder="" value="" required></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td style="text-align:right;"><label style="">Отчество</label></td>-->
-                <!--<td><input class="form-control" type="text" name="cognomen" placeholder="" value="" required></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td style="text-align:right;"><label style="">Возраст</label></td>-->
-                <!--<td><input class="form-control" type="text" name="age" placeholder="" value="" required></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td style="text-align:right;"><label style="">Вес</label></td>-->
-                <!--<td><input class="form-control" type="text" name="weight" placeholder="" value="" required></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td style="text-align:right;"><label style="">Рост</label></td>-->
-                <!--<td><input class="form-control" type="text" name="height" placeholder="" value="" required></td>-->
-            <!--</tr>-->
-        <!--</table>-->
-         <!--<input  style="text-align:right;" type="submit" value="OK">-->
-    <!--</form>-->
-<!--</body>-->
-<!--</html>-->

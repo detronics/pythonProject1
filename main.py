@@ -1,10 +1,11 @@
-from flask import Flask, render_template, url_for, request, flash, session, redirect, abort, g, make_response
+from flask import Flask, render_template, url_for, request, flash,  redirect, abort, g, make_response
 import os, sqlite3
 from FDataBase import FDataBase
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from UserLogin import UserLogin
 from oksy import Recognizer
+from forms import LoginForm, RegistrationForm
 
 # config
 DATABASE = '/tmp/main.db'
@@ -65,15 +66,16 @@ def close_db(error):
 def index():
     if current_user.is_authenticated:
         return redirect(url_for('personal_cabinet', ))
-    if request.method == 'POST':
-        user = dbase.getUserbyLogin(request.form['login'])
-        if user and check_password_hash(user['psw_hash'], request.form['password']):
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = dbase.getUserbyLogin(form.login.data)
+        if user and check_password_hash(user['psw_hash'], form.password.data):
             userlogin = UserLogin().create(user)
-            rm = True if request.form.get('remember_me') else False
-            login_user(userlogin, remember=True)
+            rm = form.remember_me.data
+            login_user(userlogin, remember=rm)
             return redirect(url_for('personal_cabinet', ))
         flash('Неверные логин или пароль', category='bad')
-    return render_template('index.html', title='Авторизация')
+    return render_template('index.html', title='Авторизация', form=form)
 
 
 @app.route('/personal_cabinet/', methods=['POST', 'GET'])
@@ -95,24 +97,21 @@ def personal_cabinet():
 
 @app.route('/registration', methods=['POST', 'GET'])
 def registration():
-    if request.method == "POST":
-        if len(request.form['login']) > 2 and len(request.form['psw']) > 4 and request.form['psw'] == request.form[
-            'psw2']:
-            psw_hash = generate_password_hash(request.form['psw'])
-            res = dbase.addUser(request.form['login'], psw_hash, request.form['name'], request.form['subname'],
-                                request.form['cognomen'], request.form['age'], request.form['weight'],
-                                request.form['height'])
-            if res:
-                flash('Вы успешно зарегистрированы', category='good')
-                user = dbase.getUserbyLogin(request.form['login'])
-                userlogin = UserLogin().create(user)
-                login_user(userlogin)
-                return redirect(url_for('personal_cabinet', ))
-            else:
-                flash('Ошибка записи в базу данных', category='bad')
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        psw_hash = generate_password_hash(form.psw1.data)
+        res = dbase.addUser(form.login.data, psw_hash, form.name.data, form.subname.data,form.cognomen.data,
+                            form.age.data, form.weight.data, form.height.data)
+        if res:
+            flash('Вы успешно зарегистрированы', category='good')
+            user = dbase.getUserbyLogin(request.form['login'])
+            userlogin = UserLogin().create(user)
+            login_user(userlogin)
+            return redirect(url_for('personal_cabinet', ))
         else:
-            flash('Неверно заполнены поля', category='bad')
-    return render_template('registration.html', title='Регистрация')
+            flash('Ошибка записи в базу данных', category='bad')
+
+    return render_template('registration.html', title='Регистрация', form=form)
 
 
 @app.route('/logout')
