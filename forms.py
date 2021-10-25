@@ -8,6 +8,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Пароль: ', validators=[DataRequired(), Length(min=4)])
     remember_me = BooleanField('Запомнить меня', default=False)
     submit = SubmitField('Войти')
+    registration = SubmitField('Зарегистрироваться')
 
 
 class RegistrationForm(FlaskForm):

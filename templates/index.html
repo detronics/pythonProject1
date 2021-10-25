@@ -2,11 +2,11 @@
 {% block content%}
 <body class="center" >
     <main class="form-signin">
-        <form action="/" method="post">
+        <form action="/" method="post" class="form-contact">
             <h1 class="h1"> Пожалуйста авторизуйтесь</h1>
             <div class="form-floating">
                 {{form.hidden_tag()}}
-                {% for field in form if field.name not in ['csrf_token', 'remember_me', 'submit']-%}
+                {% for field in form if field.name not in ['csrf_token', 'remember_me', 'submit', 'registration']-%}
                      <p class="form-control"> {{field.label()}}
                     {% if field.errors%}
                         {{field (class='bad')}}
@@ -19,28 +19,15 @@
                         {{field()}}
                     {% endif%}
                 {% endfor%}
-<!--                <p> {{form.login.label()}} {{form.login()}}-->
-<!--                <p> {{form.password.label()}} {{form.password()}}-->
                 <p> {{form.remember_me.label()}} {{form.remember_me()}}
                 <p> {{form.submit ()}}
-
-<!--                <input  class="form-control" type="text" name="login" value='' placeholder="Логин">-->
             </div>
-<!--            <div class="form-floating">-->
-<!--                <input  class="form-control" type="password" name="password" value="" placeholder="Пароль"><br>-->
-<!--            </div>-->
-<!--            {% for cat,msg in get_flashed_messages(True)%}-->
-<!--                <div class="{{cat}}" >{{msg}}</div>-->
-<!--            {% endfor %}-->
-<!--            <div class="remember_me">-->
-<!--                <input class="checkbox" type="checkbox" name="remember_me"><label> Запомнить меня</label>-->
-<!--            </div>-->
-<!--            <button class="singin" type="submit">Войти</button>-->
         </form>
-        <form action="/registration">
-             <button class="registr" type="submit">Зарегистрироваться</button>
+        <form action="/registration" style="padding-top: 125px;padding-left: 25px;">
+            <p> {{form.registration ()}}
+<!--             <button class="registr" type="submit">Зарегистрироваться</button>-->
         </form>
-        <p class="text">&copy;2021</p>
+<!--        <p class="text">&copy;2021</p>-->
     </main>
 
 </body>
