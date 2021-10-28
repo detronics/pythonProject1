@@ -6,6 +6,7 @@ from flask_login import LoginManager, login_user, current_user, logout_user, log
 from UserLogin import UserLogin
 from oksy import Recognizer
 from forms import LoginForm, RegistrationForm
+from admin.admin import admin
 
 # config
 DATABASE = '/tmp/main.db'
@@ -15,6 +16,7 @@ SECRET_KEY = '89jf98hvs999>ioc'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+app.register_blueprint(admin, url_prefix = '/admin')
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'main.db')))
 login_manager = LoginManager(app)
 login_manager.login_view = 'index'
