@@ -10,7 +10,6 @@
     font-size: 1rem;
 }
 h1{
-
     font-family: sans-serif;
     font-weight:medium;
     padding-bottom:1px;
@@ -38,6 +37,8 @@ h1{
             padding-bottom: 40px;
             margin:0;
             box-sizing: border-box;
+            align-content: center;
+            flex-direction: column;
 }
 .form-signin{
             width: 100%;

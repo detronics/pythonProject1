@@ -3,6 +3,6 @@
 {{ super() }}
     <div style="center">
         <h1>Admin-panel main page</h1>
-        <a href="/logout">Logout</a>
+        <a href="{{url_for('.logout')}}">Logout</a>
     </div>
 {% endblock %}

@@ -5,12 +5,15 @@ from flask import  render_template, url_for, request, flash, redirect, g, sessio
 admin = Blueprint('admin', __name__, static_folder='static', template_folder='templates')
 
 def login_admin():
+    print('login')
     session['admin_logged'] = 1
+    print(session['admin_logged'])
 
 def isLogged():
-    return  True if session.get('admin_logged') else False
+    return True if session.get('admin_logged') else False
 
 def logout_admin():
+    print('logout')
     session.pop('admin_logged', None)
 
 @admin.route('/')
@@ -26,13 +29,14 @@ def login():
             login_admin()
             return redirect(url_for('.index'))
         else:
-            flash('incorrect password or login')
-
+            flash('Incorrect password or login')
     return render_template('admin/login.html', title= 'Admin-panel')
 
-@admin.route('/logout', methods=['POST', 'GET'])
+@admin.route('/logout', methods=["POST", "GET"])
 def logout():
     if not isLogged():
         return redirect(url_for('.login'))
+
     logout_admin()
+
     return redirect(url_for('.login'))
